@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Job</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+          crossorigin="anonymous"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      background: linear-gradient(to right, #f8f9fa, #e9ecef);
+      font-family: 'Roboto', sans-serif;
+      color: #343a40;
+      padding-top: 70px;
+    }
+
+    header {
+      background-color: #007bff;
+      color: white;
+      padding: 15px 0;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+    }
+
+    footer {
+      background-color: #343a40;
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+      margin-top: 30px;
+    }
+
+    .form-container {
+      max-width: 1000px;
+      margin: 50px auto;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 15px;
+      background-color: #fff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-title {
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: bold;
+      font-size: 1.5rem;
+    }
+
+    .form-select {
+      padding: 6px 12px;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.42857143;
+      color: #555;
+      background-color: #fff;
+      background-image: none;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .form-control {
+      border-radius: 4px;
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+
+    .d-flex-button-container {
+      display: flex;
+      gap: 10px;
+      margin-left: 40%;
+    }
+
+  </style>
+
+  <script>
+    function addSkill() {
+      const skillGroup = document.createElement("div");
+      skillGroup.classList.add("form-group", "mt-3");
+
+      const skillLabel = document.createElement("label");
+      skillLabel.innerText = "Skill";
+      skillGroup.appendChild(skillLabel);
+
+      const skillSelect = document.createElement("select");
+      skillSelect.classList.add("form-control");
+      skillSelect.name = "skills";
+      skillSelect.required = true;
+      skillSelect.innerHTML = document.getElementById("skills").innerHTML;
+      skillGroup.appendChild(skillSelect);
+
+      const levelLabel = document.createElement("label");
+      levelLabel.classList.add("mt-2");
+      levelLabel.innerText = "Skill Level";
+      skillGroup.appendChild(levelLabel);
+
+      const levelSelect = document.createElement("select");
+      levelSelect.classList.add("form-control");
+      levelSelect.name = "skillLevels";
+      levelSelect.required = true;
+      levelSelect.innerHTML = `
+            <option value="BEGINNER">Beginner</option>
+            <option value="INTERMEDIATE">Intermediate</option>
+            <option value="EXPERT">Expert</option>
+            `;
+      skillGroup.appendChild(levelSelect);
+
+      const moreInfosLabel = document.createElement("label");
+      moreInfosLabel.classList.add("mt-2");
+      moreInfosLabel.innerText = "More Infos";
+      skillGroup.appendChild(moreInfosLabel);
+
+      const moreInfosInput = document.createElement("input");
+      moreInfosInput.classList.add("form-control");
+      moreInfosInput.name = "more_infos";
+      moreInfosInput.required = true;
+      skillGroup.appendChild(moreInfosInput);
+
+      document.getElementById("skillsContainer").appendChild(skillGroup);
+    }
+
+    function removeSkill() {
+      const skillsContainer = document.getElementById("skillsContainer");
+      if (skillsContainer.children.length > 1) {
+        skillsContainer.removeChild(skillsContainer.lastChild);
+      }
+    }
+  </script>
+</head>
+<body>
+<div class="container mt-5">
+  <h1 class="title text-center">Add New Job</h1>
+  <a href="javascript:history.back()" class="btn btn-secondary mb-3">Back</a>
+
+  <div class="card">
+    <div class="card-header">
+      Job Information
+    </div>
+    <div class="card-body">
+      <form action="/jobs/save" method="POST">
+        <input type="hidden" name="companyId" th:value="${companyId}"/>
+        <div class="form-group">
+          <label for="jobName">Job Name</label>
+          <input type="text" class="form-control" id="jobName" name="jobName" required>
+        </div>
+        <div class="form-group">
+          <label for="jobDesc">Job Description</label>
+          <textarea class="form-control" id="jobDesc" name="jobDesc" rows="4" required></textarea>
+        </div>
+
+        <div id="skillsContainer">
+          <div class="form-group">
+            <label for="skills">Skill</label>
+            <select class="form-control" id="skills" name="skills" required>
+              <option th:each="skill : ${skills}" th:value="${skill.id}"
+                      th:text="${skill.skillName}"></option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="skillLevel">Skill Level</label>
+            <select class="form-control" id="skillLevel" name="skillLevels" required>
+              <option value="BEGINNER">Beginner</option>
+              <option value="INTERMEDIATE">Intermediate</option>
+              <option value="EXPERT">Expert</option>
+            </select>
+          </div>
+          <div class="form-group mt-3">
+            <label for="more_infos">More Infos</label>
+            <input type="text" class="form-control" id="more_infos" name="more_infos" required>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-secondary mt-3" onclick="addSkill()">+</button>
+        <button type="button" class="btn btn-secondary mt-3" onclick="removeSkill()">-</button><br>
+        <button type="submit" class="btn btn-primary mt-3">Add Job</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2024 JobFinder. All Rights Reserved.</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate Profile</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(to right, #f8f9fa, #e9ecef);
+            font-family: 'Roboto', sans-serif;
+            color: #343a40;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px 0;
+            background-color: #343a40;
+            color: #fff;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            border-radius: 15px 15px 0 0;
+        }
+        .btn-primary {
+            border: none;
+            transition: all 0.3s;
+        }
+        .list-group-item small {
+            display: block;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Candidate Profile</h1>
+    <div class="card">
+        <div class="card-body">
+            <p th:if="${candidate.fullName}">
+                <strong>Full Name:</strong> <span th:text="${candidate.fullName}"></span>
+            </p>
+            <p th:if="${candidate.dob}">
+                <strong>Date of Birth:</strong> <span th:text="${candidate.dob}"></span>
+            </p>
+            <p th:if="${candidate.phone}">
+                <strong>Phone:</strong> <span th:text="${candidate.phone}"></span>
+            </p>
+            <p th:if="${candidate.address}">
+                <strong>Address:</strong> <span th:text="${candidate.address.fullAddress}"></span>
+            </p>
+            <p th:if="${candidate.email}">
+                <strong>Email:</strong> <span th:text="${candidate.email}"></span>
+            </p>
+        </div>
+        <div class="card-footer text-end">
+            <a href="javascript:history.back()" class="btn btn-secondary">Back</a>
+        </div>
+    </div>
+</div>
+
+
+<footer>
+    <p>&copy; 2024 JobFinder. All Rights Reserved.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
+</body>
+</html>
