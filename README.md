@@ -1,3 +1,5 @@
+Nguyen Duy Thanh - 21040431
+
 Hoàn thành cơ bản Project
 Thực hiện được các chức năng như:
 
