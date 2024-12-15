@@ -2,18 +2,18 @@ package vn.edu.iuh.fit.week05_nguyenduythanh.fontend.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import vn.edu.iuh.fit.week05_nguyenduythanh.backend.enums.SkillLevel;
 import vn.edu.iuh.fit.week05_nguyenduythanh.backend.ids.JobSkillId;
-import vn.edu.iuh.fit.week05_nguyenduythanh.backend.models.Company;
-import vn.edu.iuh.fit.week05_nguyenduythanh.backend.models.Job;
-import vn.edu.iuh.fit.week05_nguyenduythanh.backend.models.JobSkill;
-import vn.edu.iuh.fit.week05_nguyenduythanh.backend.models.Skill;
+import vn.edu.iuh.fit.week05_nguyenduythanh.backend.models.*;
 import vn.edu.iuh.fit.week05_nguyenduythanh.backend.repositories.*;
 import vn.edu.iuh.fit.week05_nguyenduythanh.backend.services.CandidateServices;
+import vn.edu.iuh.fit.week05_nguyenduythanh.backend.services.EmailService;
 import vn.edu.iuh.fit.week05_nguyenduythanh.backend.services.JobServices;
 
 import java.util.HashSet;
@@ -46,6 +46,12 @@ public class JobController {
 
     @Autowired
     private SkillRepository skillRepository;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private JavaMailSender mailSender;
 
     @GetMapping("/list_no_paging")
     public String showJobList(Model model) {
@@ -151,11 +157,6 @@ public class JobController {
     }
 
 
-    @GetMapping("/apply/{id}")
-    public String applyJob(@PathVariable("id") long id) {
-        return "redirect:/jobs?success=applySuccess";
-    }
-
     @GetMapping("/view_detail_job/{id}")
     public ModelAndView viewJob(@PathVariable("id") long id) {
         ModelAndView modelAndView = new ModelAndView();
@@ -199,4 +200,36 @@ public class JobController {
         return "redirect:/jobs?success=deleteSuccess";
     }
 
+
+    @GetMapping("/{jobId}/{candidateId}/send-email")
+    public String sendEmail(@PathVariable("jobId") Long jobId, @PathVariable("candidateId") Long candidateId) {
+        Job job = jobRepository.findById(jobId)
+                .orElseThrow(() -> new RuntimeException("Job not found"));
+
+        Candidate candidate = candidateRepository.findById(candidateId)
+                .orElseThrow(() -> new RuntimeException("Candidate not found"));
+
+        String subject = "Job Application for " + candidate.getFullName();
+        String body = "Hello " + candidate.getFullName() + ",\n\nWe are pleased to inform you about the job opportunity at our company. Please visit our website for more details.";
+
+        sendEmail(candidate.getEmail(), subject, body);
+
+        return "redirect:/jobs?success=applySuccess";
+    }
+
+    private void sendEmail(String to, String subject, String body) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(body);
+        message.setFrom("thanh121224@gmail.com");
+        mailSender.send(message);
+    }
+
+    @GetMapping("/apply/{id}")
+    public String applyJob(@PathVariable("id") long id) {
+        // Implement the logic for applying to a job if needed
+
+        return "redirect:/jobs?success=applySuccess";
+    }
 }

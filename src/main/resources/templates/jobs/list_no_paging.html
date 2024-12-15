@@ -52,7 +52,7 @@
         <ul>
           <li th:each="jobSkill : ${job.jobSkills}">
             <span th:text="${jobSkill.skill.skillName}"></span>:
-            <span th:text="${jobSkill.skillLevel}"></span> -
+            <span th:text="${jobSkill.skillLevel  }"></span> -
             <span th:text="${jobSkill.skill.type}"></span>
           </li>
         </ul>
