@@ -1,6 +1,7 @@
 Nguyen Duy Thanh - 21040431
 
 Hoàn thành cơ bản Project
+
 Thực hiện được các chức năng như:
 
 View(full và page), Edit, Search, Delete, Add new Candidates
@@ -14,3 +15,5 @@ Một số lỗi còn gặp phải:
 Add, Edit(update) của Candidates bị lỗi Date
 
 Search của Jobs bị lỗi k tìm được hết
+
+Chưa làm được Email (gữi yêu cầu xác nhận apply)
